@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Truth Detection System</title>
+
+<style>
+
+body{
+background:black;
+color:#00ffcc;
+font-family:monospace;
+text-align:center;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.container{
+width:350px;
+padding:30px;
+border:2px solid #00ffcc;
+border-radius:10px;
+}
+
+h1{
+font-size:20px;
+letter-spacing:3px;
+}
+
+#scanBox{
+margin-top:20px;
+height:150px;
+border:2px solid #00ffcc;
+position:relative;
+overflow:hidden;
+}
+
+.scanLine{
+width:100%;
+height:2px;
+background:#00ffcc;
+position:absolute;
+animation:scan 2s infinite;
+}
+
+@keyframes scan{
+0%{top:0}
+100%{top:150px}
+}
+
+button{
+margin-top:20px;
+padding:10px 25px;
+background:#00ffcc;
+border:none;
+cursor:pointer;
+font-weight:bold;
+}
+
+#text{
+margin-top:20px;
+min-height:60px;
+}
+
+.red{
+color:#ff4040;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>TRUTH DETECTION SYSTEM</h1>
+
+<div id="scanBox">
+<div class="scanLine"></div>
+</div>
+
+<div id="text">
+Press START
+</div>
+
+<button onclick="startGame()">START</button>
+
+</div>
+
+<script>
+
+let step = 0;
+
+const texts = [
+
+"QUESTION: ใครเคยนินทาเพื่อนในกลุ่มนี้",
+
+"QUESTION: ใครเคยหักหลังเพื่อนในกลุ่มนี้",
+
+"QUESTION: ใครในกลุ่มนี้ ที่ไม่ใช่เพื่อนจริงๆ"
+
+];
+
+function speak(text){
+let msg = new SpeechSynthesisUtterance(text);
+msg.lang="en-US";
+speechSynthesis.speak(msg);
+}
+
+function startGame(){
+
+let textBox = document.getElementById("text");
+
+if(step===0){
+
+textBox.innerHTML="Scanning Face...";
+speak("Scanning face");
+
+setTimeout(()=>{
+textBox.innerHTML=texts[0];
+speak("First question");
+step++;
+},2000);
+
+}
+
+else if(step===1){
+
+textBox.innerHTML="Analyzing...";
+speak("Analyzing");
+
+setTimeout(()=>{
+textBox.innerHTML='<span class="red">LIES DETECTED</span>';
+speak("Lies detected");
+step++;
+},2000);
+
+}
+
+else if(step===2){
+
+textBox.innerHTML=texts[1];
+speak("Second question");
+step++;
+
+}
+
+else if(step===3){
+
+textBox.innerHTML='<span class="red">พบ 3 คนที่โกหก</span><br><br>1 มีคนเอางานเพื่อนไปใช้<br>2 มีคนนินทาลับหลังเพื่อน<br>3 มีคนโกหกเรื่องใหญ่';
+speak("Three lies detected");
+step++;
+
+}
+
+else if(step===4){
+
+textBox.innerHTML=texts[2];
+speak("Final question");
+step++;
+
+}
+
+else{
+
+textBox.innerHTML='<span class="red">Analyzing final answer...</span>';
+speak("Analyzing");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
